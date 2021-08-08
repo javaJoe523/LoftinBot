@@ -1,0 +1,2 @@
+# LoftinBot
+Python Discord Bot
