@@ -26,16 +26,17 @@ def get_fact():
   response = requests.get("https://uselessfacts.jsph.pl/random.txt?language=en")
   return ([response.text])
 
-def get_cur_weather(querystring):
-  url = "https://weatherapi-com.p.rapidapi.com/current.json"
+def get_cur_weather(query):
+  url = "https://visual-crossing-weather.p.rapidapi.com/forecast"
+  querystring = {"location":query,"aggregateHours":"24","shortColumnNames":"0","unitGroup":"us","contentType":"json"}
   headers = {
     'x-rapidapi-key': os.getenv('RAPIDAPI_KEY'),
-    'x-rapidapi-host': "weatherapi-com.p.rapidapi.com"
+    'x-rapidapi-host': "visual-crossing-weather.p.rapidapi.com"
   }
-  response = requests.get(url, headers=headers, params={"q": querystring})
+  response = requests.get(url, headers=headers, params=querystring)
   json_data = json.loads(response.text)
-  cur_temp = json_data['current']['temp_f']
-  return (f'The current temperature in {querystring} is {cur_temp}.')
+  cur_temp = json_data['locations'][f'{query}']['currentConditions']['temp']
+  return (f'The current temperature in {query} is {cur_temp}.')
 
 def get_help():
   help_info = "!help: This message | !hello: Greet the bot | !inspire: Motivational Quotes | !8ball: Ask the 8 ball a question | !dice: Roll the dice | !fact: Random Fact | !sortinghat: Sorts you into a Harry Potter House | !weather {location}: Check the current temperature"
