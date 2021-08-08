@@ -62,4 +62,4 @@ async def on_message(message):
       msg = ("You are in house "+h+".")
     await message.channel.send(msg)
 
-client.run(os.getenv('token'))
+client.run(os.getenv('discord_token'))
