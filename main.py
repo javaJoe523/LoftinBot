@@ -27,6 +27,7 @@ def get_fact():
   return ([response.text])
 
 def get_cur_weather(query):
+  # Call the API
   url = "https://visual-crossing-weather.p.rapidapi.com/forecast"
   querystring = {"location":query,"aggregateHours":"24","shortColumnNames":"0","unitGroup":"us","contentType":"json"}
   headers = {
@@ -35,8 +36,19 @@ def get_cur_weather(query):
   }
   response = requests.get(url, headers=headers, params=querystring)
   json_data = json.loads(response.text)
+  # Get specific data
   cur_temp = json_data['locations'][f'{query}']['currentConditions']['temp']
-  return (f'The current temperature in {query} is {cur_temp}.')
+  heat_index = json_data['locations'][f'{query}']['currentConditions']['heatindex']
+  windchill = json_data['locations'][f'{query}']['currentConditions']['windchill']
+  humidity = json_data['locations'][f'{query}']['currentConditions']['humidity']
+  # Create the message
+  result = f'The current temperature in {query} is {cur_temp}'
+  if (heat_index is not None):
+    result += f' but it feels like {heat_index}'
+  if (windchill is not None):
+    result += f' but there is a windchill of {windchill}'
+  result += f'. The current humidity is {humidity}%.'
+  return (result)
 
 def get_help():
   help_info = "!help: This message | !hello: Greet the bot | !inspire: Motivational Quotes | !8ball: Ask the 8 ball a question | !dice: Roll the dice | !fact: Random Fact | !sortinghat: Sorts you into a Harry Potter House | !weather {location}: Check the current temperature"
