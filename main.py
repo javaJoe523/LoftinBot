@@ -3,16 +3,7 @@ import os
 import requests
 import json
 import random
-
-greeting = ['Hello!', 'Yo!', 'Greetings Human.', 'Pleasant to meet you.']
-sad_words = ['sad', 'depressed', 'unhappy', 'angry', 'miserable']
-yes_no = ['Yes', 'No', 'Maybe', 'Not likely']
-houses = ['Ravenclaw', 'Hufflepuff', 'Gryffindor', 'Slytherin', 'Muggle']
-encouragements = [
-  'Cheer up!',
-  'Hang in there.',
-  'You are a great person / bot!'
-]
+import const
 
 client = discord.Client()
 
@@ -51,12 +42,11 @@ def get_cur_weather(query):
   return (result)
 
 def get_help():
-  help_info = "!help: This message | !hello: Greet the bot | !inspire: Motivational Quotes | !8ball: Ask the 8 ball a question | !dice: Roll the dice | !fact: Random Fact | !sortinghat: Sorts you into a Harry Potter House | !weather {location}: Check the current temperature"
-  return ([help_info])
+  return ([const.HELP_INFO])
 
 async def send_msg(message, keys, options):
-  msg = message.content
-  if any(word in msg for word in keys):
+  msg = message.content.lower()
+  if any(word.lower() in msg for word in keys):
     response = random.choice(options)
     await message.channel.send(response)
 
@@ -69,18 +59,19 @@ async def on_message(message):
   if message.author == client.user:
     return
 
-  await send_msg(message, ['!hello'], greeting)
+  await send_msg(message, ['!hello'], const.GREETING)
   await send_msg(message, ['!inspire'], get_quote())
-  await send_msg(message, ['!8ball'], yes_no)
-  await send_msg(message, sad_words, encouragements)
+  await send_msg(message, ['!8ball'], const.YES_NO)
+  await send_msg(message, const.SAD_WORDS, const.ENCOURAGEMENTS)
   await send_msg(message, ['!fact'], get_fact())
+  await send_msg(message, ['!rps'], const.RPS)
   await send_msg(message, ['!dice'], ([random.randint(2,12)]))
   await send_msg(message, ['!help'], get_help())
 
   #Custom
   msg = message.content
   if '!sortinghat' in msg:
-    h = random.choice(houses)
+    h = random.choice(const.HOUSES)
     if (h == "Muggle"):
       msg = "I'm sorry but you are a muggle."
     else:
