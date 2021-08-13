@@ -3,7 +3,7 @@ SAD_WORDS = ['sad', 'depressed', 'unhappy', 'angry', 'miserable']
 YES_NO = ['Yes', 'No', 'Maybe', 'Not likely']
 RPS = ['Rock', 'Paper', 'Scissors']
 CMD_LANG = ['!french', '!spanish', '!italian']
-CMD_DAYSUNTIL = '!daysuntil'
+CMD_DAYSUNTIL = ['!daysuntil']
 HOUSES = ['Ravenclaw', 'Hufflepuff', 'Gryffindor', 'Slytherin', 'Muggle']
 ENCOURAGEMENTS = [
   'Cheer up!',

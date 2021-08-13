@@ -19,8 +19,8 @@ def get_fact():
   return ([response.text])
 
 def date_diff(msg):
-  if (not msg or not msg.content):
-    return ([''])
+  if (not msg or not msg.content or msg.content not in const.CMD_DAYSUNTIL):
+    return
   msg = get_cmd_input(msg, const.CMD_DAYSUNTIL)
   today = date.today()
   to_date = datetime.strptime(msg, "%m/%d/%Y").date()
