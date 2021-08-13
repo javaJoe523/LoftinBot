@@ -2,7 +2,8 @@ GREETING = ['Hello!', 'Yo!', 'Greetings Human.', 'Pleasant to meet you.']
 SAD_WORDS = ['sad', 'depressed', 'unhappy', 'angry', 'miserable']
 YES_NO = ['Yes', 'No', 'Maybe', 'Not likely']
 RPS = ['Rock', 'Paper', 'Scissors']
-LANG_COMMANDS = ['!french', '!spanish', '!italian']
+CMD_LANG = ['!french', '!spanish', '!italian']
+CMD_DAYSUNTIL = '!daysuntil'
 HOUSES = ['Ravenclaw', 'Hufflepuff', 'Gryffindor', 'Slytherin', 'Muggle']
 ENCOURAGEMENTS = [
   'Cheer up!',

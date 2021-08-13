@@ -21,13 +21,13 @@ def get_fact():
 def date_diff(msg):
   if (not msg or not msg.content):
     return ([''])
-  msg = msg.content.lower().split(' ', 1)[1]
+  msg = get_cmd_input(msg, const.CMD_DAYSUNTIL)
   today = date.today()
   to_date = datetime.strptime(msg, "%m/%d/%Y").date()
   return ([(to_date - today).days])
 
 def translate_msg(msg, code):
-  if (not msg or not msg.content or msg.content not in const.LANG_COMMANDS):
+  if (not msg or not msg.content or msg.content not in const.CMD_LANG):
     return
   if (len(msg.content.split(' ', 1)) <= 1):
     return (["Invalid Message"])
@@ -71,6 +71,11 @@ def get_cur_weather(query):
 
 def get_help():
   return ([const.HELP_INFO])
+
+def get_cmd_input(message, cmd):
+  msg = message.content.lower()
+  pos = msg.find(cmd) + len(cmd)
+  return msg[pos::]
 
 async def send_msg(message, keys, options):
   msg = message.content.lower()
