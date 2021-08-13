@@ -4,6 +4,7 @@ import requests
 import json
 import random
 import const
+from datetime import date, datetime
 
 client = discord.Client()
 
@@ -16,6 +17,33 @@ def get_quote():
 def get_fact():
   response = requests.get("https://uselessfacts.jsph.pl/random.txt?language=en")
   return ([response.text])
+
+def date_diff(msg):
+  if (not msg or not msg.content):
+    return ([''])
+  msg = msg.content.lower().split(' ', 1)[1]
+  today = date.today()
+  to_date = datetime.strptime(msg, "%m/%d/%Y").date()
+  return ([(to_date - today).days])
+
+def translate_msg(msg, code):
+  if (not msg or not msg.content or msg.content not in const.LANG_COMMANDS):
+    return
+  if (len(msg.content.split(' ', 1)) <= 1):
+    return (["Invalid Message"])
+
+  msg = msg.content.lower().split(' ', 1)[1]
+  url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
+  payload = f"q={msg}&format=text&target={code}&source=en"
+  headers = {
+    'content-type': "application/x-www-form-urlencoded",
+    'accept-encoding': "application/gzip",
+    'x-rapidapi-key': os.getenv('RAPIDAPI_KEY'),
+    'x-rapidapi-host': "google-translate1.p.rapidapi.com"
+  }
+  response = requests.request("POST", url, data=payload.encode('utf-8'), headers=headers)
+  json_data = json.loads(response.text)
+  return ([json_data["data"]["translations"][0]["translatedText"]])
 
 def get_cur_weather(query):
   # Call the API
@@ -66,6 +94,10 @@ async def on_message(message):
   await send_msg(message, ['!fact'], get_fact())
   await send_msg(message, ['!rps'], const.RPS)
   await send_msg(message, ['!dice'], ([random.randint(2,12)]))
+  await send_msg(message, ['!french'], translate_msg(message, 'fr'))
+  await send_msg(message, ['!spanish'], translate_msg(message, 'es'))
+  await send_msg(message, ['!italian'], translate_msg(message, 'it'))
+  await send_msg(message, ['!daysuntil'], date_diff(message))
   await send_msg(message, ['!help'], get_help())
 
   #Custom
