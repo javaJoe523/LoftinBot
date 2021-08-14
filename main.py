@@ -55,6 +55,7 @@ def get_cur_weather(msg):
   if (not allow_cmd(msg, ['!weather'])):
     return ([''])
   query = get_cmd_input(msg, '!weather')
+  
   # Call the API
   url = "https://visual-crossing-weather.p.rapidapi.com/forecast"
   querystring = {"location":query,"aggregateHours":"24","shortColumnNames":"0","unitGroup":"us","contentType":"json"}
@@ -64,11 +65,17 @@ def get_cur_weather(msg):
   }
   response = requests.get(url, headers=headers, params=querystring)
   json_data = json.loads(response.text)
+  
   # Get specific data
-  cur_temp = json_data['locations'][f'{query}']['currentConditions']['temp']
-  heat_index = json_data['locations'][f'{query}']['currentConditions']['heatindex']
-  windchill = json_data['locations'][f'{query}']['currentConditions']['windchill']
-  humidity = json_data['locations'][f'{query}']['currentConditions']['humidity']
+  try:
+    json_data = json_data['locations'][f'{query}']['currentConditions']
+  except:
+    print("Could not find currentConditions.")
+  cur_temp   = json_data['temp']
+  heat_index = json_data['heatindex']
+  windchill  = json_data['windchill']
+  humidity   = json_data['humidity']
+
   # Create the message
   result = f'The current temperature in {query} is {cur_temp}'
   if (heat_index is not None):
