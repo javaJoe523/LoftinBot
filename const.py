@@ -10,5 +10,5 @@ ENCOURAGEMENTS = [
   'Hang in there.',
   'You are a great person / bot!'
 ]
-HELP_INFO = "!help: This message | !hello: Greet the bot | !inspire: Motivational Quotes | !8ball: Ask the 8 ball a question | !dice: Roll the dice | !fact: Random Fact | !sortinghat: Sorts you into a Harry Potter House | !weather {location}: Check the current temperature | !rps: Rock/Paper/Scissors | !french [text]: Translate text to French | !spanish [text]: Translate text to Spanish | !italian [text]: Translate text to Italian | !daysuntil [MM/DD/YYYY]"
+HELP_INFO = "!help: This message | !hello: Greet the bot | !inspire: Motivational Quotes | !8ball: Ask the 8 ball a question | !dice: Roll the dice | !fact: Random Fact | !sortinghat: Sorts you into a Harry Potter House | !weather {location}: Check the current temperature | !rps: Rock/Paper/Scissors | !daysuntil [MM/DD/YYYY]"
  
