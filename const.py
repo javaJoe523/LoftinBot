@@ -1,3 +1,7 @@
+FACT_API_URL = "https://uselessfacts.jsph.pl/random.txt?language=en"
+INSPIRE_API_URL = "https://zenquotes.io/api/random"
+NASA_API_URL = "https://api.nasa.gov/planetary/apod"
+WEATHER_API_URL = "https://visual-crossing-weather.p.rapidapi.com/forecast"
 GREETING = ['Hello!', 'Yo!', 'Greetings Human.', 'Pleasant to meet you.']
 SAD_WORDS = ['sad', 'depressed', 'unhappy', 'angry', 'miserable']
 YES_NO = ['Yes', 'No', 'Maybe', 'Not likely']
