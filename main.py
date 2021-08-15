@@ -35,12 +35,11 @@ def translate_msg(msg, cmd, code):
   # TODO: Use a dictionary for code
   if (not allow_cmd(msg, [cmd])):
     return ([''])
-  msg = msg.split(' ', 1)
-  if (len(msg) <= 1):
-    return (["Invalid Message"])
-  msg = msg[1]
+  msg = get_cmd_input(msg, cmd)
+  if not msg:
+    return ([''])
 
-  service = build('translate', 'v2', developerKey=os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+  service = build('translate', 'v2', developerKey=os.getenv('GOOGLE_API_KEY'))
   json_data = service.translations().list( source='en', target=code, q=[msg] ).execute()
   return ([json_data['translations'][0]['translatedText']])
 
