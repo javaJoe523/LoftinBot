@@ -4,7 +4,7 @@ import requests
 import json
 import random
 import const
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from googleapiclient.discovery import build
 
 client = discord.Client()
@@ -22,6 +22,16 @@ def get_fact(msg):
     return (['']) 
   response = requests.get("https://uselessfacts.jsph.pl/random.txt?language=en")
   return ([response.text])
+
+def get_space_pic(msg):
+  if (not allow_cmd(msg, ['!space'])):
+    return ([''])
+  startdate=date.today()
+  date_str=startdate-timedelta(random.randint(1,365))
+  api_key=os.getenv('NASA_API_KEY')
+  response = requests.get(f'https://api.nasa.gov/planetary/apod?api_key={api_key}&date={date_str}')
+  json_data = json.loads(response.text)
+  return ([json_data['url']])
 
 def date_diff(msg):
   if (not allow_cmd(msg, const.CMD_DAYSUNTIL)):
@@ -120,6 +130,7 @@ async def on_message(message):
   await send_msg(message, ['!italian'], translate_msg(msg, '!italian', 'it'), False)
   await send_msg(message, ['!daysuntil'], date_diff(msg))
   await send_msg(message, ['!weather'], get_cur_weather(msg), False)
+  await send_msg(message, ['!space'], get_space_pic(msg), False)
   await send_msg(message, ['!help'], get_help())
 
   #Custom
