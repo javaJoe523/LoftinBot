@@ -5,6 +5,7 @@ import json
 import random
 import const
 from datetime import date, datetime
+from googleapiclient.discovery import build
 
 client = discord.Client()
 
@@ -31,6 +32,7 @@ def date_diff(msg):
   return ([(to_date - today).days])
 
 def translate_msg(msg, cmd, code):
+  # TODO: Use a dictionary for code
   if (not allow_cmd(msg, [cmd])):
     return ([''])
   msg = msg.split(' ', 1)
@@ -38,18 +40,9 @@ def translate_msg(msg, cmd, code):
     return (["Invalid Message"])
   msg = msg[1]
 
-  url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
-  payload = f"q={msg}&format=text&target={code}&source=en"
-  headers = {
-    'content-type': "application/x-www-form-urlencoded",
-    'accept-encoding': "application/gzip",
-    'x-rapidapi-key': os.getenv('RAPIDAPI_KEY'),
-    'x-rapidapi-host': "google-translate1.p.rapidapi.com"
-  }
-  response = requests.request("POST", url, data=payload.encode('utf-8'), headers=headers)
-  json_data = json.loads(response.text)
-  # TODO: Hit monthly cap during testing. Migrate to actual Google API.
-  return ([''])
+  service = build('translate', 'v2', developerKey=os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+  json_data = service.translations().list( source='en', target=code, q=[msg] ).execute()
+  return ([json_data['translations'][0]['translatedText']])
 
 def get_cur_weather(msg):
   if (not allow_cmd(msg, ['!weather'])):
