@@ -30,7 +30,6 @@ async def on_message(message):
   if message.author == client.user:
     return
   msg = helpers.get_message_content(message)
-  msg_commands = list(filter(lambda c: c in msg, const.COMMANDS))
   # Define Commands so that they will be handled dynamically
   cmd_func_list = {
     '!help':       {'value': [const.HELP_INFO]},
@@ -50,6 +49,7 @@ async def on_message(message):
   }
 
   # Handle Command Messages
+  msg_commands = list(filter(lambda c: c in msg, cmd_func_list.keys()))
   for c in msg_commands:
    assert cmd_func_list[c]
    if cmd_func_list[c].get('value'):
