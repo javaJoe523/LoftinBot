@@ -34,18 +34,18 @@ async def on_message(message):
   # Define Commands so that they will be handled dynamically
   cmd_func_list = {
     '!hello': {'value': const.GREETING},
-    '!inspire': {'func': 'get_quote', 'args': {'msg': msg}},
+    '!inspire': {'func': helpers.get_quote, 'args': {'msg': msg}},
     '!8ball': {'value': const.YES_NO },
-    '!fact': {'func': 'get_fact', 'args': {'msg': msg}},
+    '!fact': {'func': helpers.get_fact, 'args': {'msg': msg}},
     '!rps': {'value': const.RPS },
-    '!dice': {'func': 'roll_dice', 'args': {'msg': msg}},
+    '!dice': {'func': helpers.roll_dice, 'args': {'msg': msg}},
     '!french': {'func': helpers.translate_msg, 'args':{'msg': msg, 'cmd': '!french', 'code': 'fr'}},
     '!spanish': {'func': helpers.translate_msg, 'args':{'msg': msg, 'cmd': '!spanish', 'code': 'es'}},
     '!italian': {'func': helpers.translate_msg, 'args':{'msg': msg, 'cmd': '!italian', 'code': 'it'}},
-    '!daysuntil': {'func': 'date_diff', 'args': {'msg': msg}},
-    '!weather': {'func':'get_cur_weather', 'args':{'msg': msg}},
-    '!space': {'func':'get_space_pic', 'args':{'msg': msg}},
-    '!sortinghat': {'func':'get_sorting_house', 'args':{'msg': msg}},
+    '!daysuntil': {'func': helpers.date_diff, 'args': {'msg': msg}},
+    '!weather': {'func':helpers.get_cur_weather, 'args':{'msg': msg}},
+    '!space': {'func':helpers.get_space_pic, 'args':{'msg': msg}},
+    '!sortinghat': {'func':helpers.get_sorting_house, 'args':{'msg': msg}},
     '!help': {'value': [const.HELP_INFO] }
   }
 
