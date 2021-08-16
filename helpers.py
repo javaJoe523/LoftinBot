@@ -6,17 +6,17 @@ import const
 from datetime import date, datetime, timedelta
 from googleapiclient.discovery import build
  
-def get_quote(msg):
+def get_quote():
  response = requests.get(const.INSPIRE_API_URL)
  json_data = json.loads(response.text)
  quote = json_data[0]['q'] + " -" + json_data[0]['a']
  return ([quote])
  
-def get_fact(msg):
+def get_fact():
  response = requests.get(const.FACT_API_URL)
  return ([response.text])
  
-def get_space_pic(msg):
+def get_space_pic():
  startdate=date.today()
  date_str=startdate-timedelta(random.randint(1,365))
  api_key=os.getenv('NASA_API_KEY')
@@ -24,23 +24,21 @@ def get_space_pic(msg):
  json_data = json.loads(response.text)
  return ([json_data['url']])
  
-def date_diff(msg):
- msg = get_cmd_input(msg, '!daysuntil')
+def date_diff(query):
+ if not query:
+   return ([''])
  today = date.today()
- to_date = datetime.strptime(msg, "%m/%d/%Y").date()
+ to_date = datetime.strptime(query, "%m/%d/%Y").date()
  return ([(to_date - today).days])
  
-def translate_msg(msg, cmd, code):
- msg = get_cmd_input(msg, cmd)
- if not msg:
+def translate_msg(query, code):
+ if not query:
    return ([''])
- 
  service = build('translate', 'v2', developerKey=os.getenv('GOOGLE_API_KEY'))
- json_data = service.translations().list( source='en', target=code, q=[msg] ).execute()
+ json_data = service.translations().list( source='en', target=code, q=[query] ).execute()
  return ([json_data['translations'][0]['translatedText']])
  
-def get_cur_weather(msg):
- query = get_cmd_input(msg, '!weather')
+def get_cur_weather(query):
   # Call the API
  querystring = {"location":query,"aggregateHours":"24","shortColumnNames":"0","unitGroup":"us","contentType":"json"}
  headers = {
@@ -72,10 +70,10 @@ def get_cur_weather(msg):
  result += f'. The current humidity is {humidity}%.'
  return ([result])
  
-def roll_dice(msg):
+def roll_dice():
  return ([random.randint(2,12)])
  
-def get_sorting_house(msg):
+def get_sorting_house():
  h = random.choice(const.HOUSES)
  if (h == "Muggle"):
    return (["I'm sorry but you are a muggle."])
