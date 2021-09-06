@@ -3,6 +3,7 @@ import requests
 import json
 import random
 import const
+import assistant
 from datetime import date, datetime, timedelta
 from googleapiclient.discovery import build
  
@@ -79,6 +80,18 @@ def get_sorting_house():
    return (["I'm sorry but you are a muggle."])
  else:
    return([f'You are in house {h}.'])
+
+def broadcast_msg(query):
+  # TODO: See if we can verify that a broadcast sent
+  if query is not None:
+    response = assistant.send_request("broadcast "+query)
+    if response is not None and response.startswith('ERROR'):
+      return (['Something went wrong :('])
+  return (['Message Sent'])
+
+#################
+# General Helpers
+#################
 
 def has_option(msg, options):
  return (msg and any(c in msg for c in options))
