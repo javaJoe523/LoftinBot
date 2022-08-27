@@ -25,18 +25,16 @@ import google.oauth2.credentials
 
 from google.assistant.embedded.v1alpha2 import (
     embedded_assistant_pb2,
-    embedded_assistant_pb2_grpc
+    embedded_assistant_pb2_grpc,
 )
 
 try:
-    from . import (
-        assistant_helpers
-    )
+    from . import assistant_helpers
 except (SystemError, ImportError):
     import assistant_helpers
 
 
-ASSISTANT_API_ENDPOINT = 'embeddedassistant.googleapis.com'
+ASSISTANT_API_ENDPOINT = "embeddedassistant.googleapis.com"
 DEFAULT_GRPC_DEADLINE = 60 * 3 + 5
 PLAYING = embedded_assistant_pb2.ScreenOutConfig.PLAYING
 
@@ -55,16 +53,14 @@ class SampleTextAssistant(object):
     """
 
     def __init__(self, display, channel):
-        self.language_code = 'en-US'
-        self.device_model_id = os.getenv('DEVICE_MODEL_ID')
-        self.device_id = 'LoftinBot'
+        self.language_code = "en-US"
+        self.device_model_id = os.getenv("DEVICE_MODEL_ID")
+        self.device_id = "LoftinBot"
         self.conversation_state = None
         # Force reset of first conversation.
         self.is_new_conversation = True
         self.display = display
-        self.assistant = embedded_assistant_pb2_grpc.EmbeddedAssistantStub(
-            channel
-        )
+        self.assistant = embedded_assistant_pb2_grpc.EmbeddedAssistantStub(channel)
         self.deadline = DEFAULT_GRPC_DEADLINE
 
     def __enter__(self):
@@ -75,12 +71,12 @@ class SampleTextAssistant(object):
             return False
 
     def assist(self, text_query):
-        """Send a text request to the Assistant and playback the response.
-        """
+        """Send a text request to the Assistant and playback the response."""
+
         def iter_assist_requests():
             config = embedded_assistant_pb2.AssistConfig(
                 audio_out_config=embedded_assistant_pb2.AudioOutConfig(
-                    encoding='LINEAR16',
+                    encoding="LINEAR16",
                     sample_rate_hertz=16000,
                     volume_percentage=0,
                 ),
@@ -105,8 +101,7 @@ class SampleTextAssistant(object):
 
         text_response = None
         html_response = None
-        for resp in self.assistant.Assist(iter_assist_requests(),
-                                          self.deadline):
+        for resp in self.assistant.Assist(iter_assist_requests(), self.deadline):
             assistant_helpers.log_assist_response_without_audio(resp)
             if resp.screen_out.data:
                 html_response = resp.screen_out.data
@@ -117,31 +112,37 @@ class SampleTextAssistant(object):
                 text_response = resp.dialog_state_out.supplemental_display_text
         return text_response, html_response
 
+
 def send_request(query=None, display=False, verbose=False):
     # Setup logging.
     logging.basicConfig(level=logging.DEBUG if verbose else logging.INFO)
 
     # Get Variables
-    api_endpoint=ASSISTANT_API_ENDPOINT
+    api_endpoint = ASSISTANT_API_ENDPOINT
 
     # Load OAuth 2.0 credentials.
-    credentials=os.path.join(click.get_app_dir('google-oauthlib-tool'), 'credentials.json')
+    credentials = os.path.join(
+        click.get_app_dir("google-oauthlib-tool"), "credentials.json"
+    )
     try:
-        with open(credentials, 'r') as f:
-            credentials = google.oauth2.credentials.Credentials(token=None,
-                                                                **json.load(f))
+        with open(credentials, "r") as f:
+            credentials = google.oauth2.credentials.Credentials(
+                token=None, **json.load(f)
+            )
             http_request = google.auth.transport.requests.Request()
             credentials.refresh(http_request)
     except Exception as e:
-        logging.error('Error loading credentials: %s', e)
-        logging.error('Run google-oauthlib-tool to initialize '
-                      'new OAuth 2.0 credentials.')
-        return 'ERROR: Credentials'
+        logging.error("Error loading credentials: %s", e)
+        logging.error(
+            "Run google-oauthlib-tool to initialize " "new OAuth 2.0 credentials."
+        )
+        return "ERROR: Credentials"
 
     # Create an authorized gRPC channel.
     grpc_channel = google.auth.transport.grpc.secure_authorized_channel(
-        credentials, http_request, api_endpoint)
-    logging.info('Connecting to %s', api_endpoint)
+        credentials, http_request, api_endpoint
+    )
+    logging.info("Connecting to %s", api_endpoint)
 
     with SampleTextAssistant(display, grpc_channel) as assistant:
         response_text, response_html = assistant.assist(text_query=query)
