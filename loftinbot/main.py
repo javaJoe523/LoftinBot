@@ -1,13 +1,14 @@
-import discord
+"""Main entrypoint for the Discord Bot"""
 import os
 import random
-import const
-import helpers
+import discord
+from . import const
+from . import helpers
 
 client = discord.Client()
 
 
-async def send_cmd_msg(message, options):
+async def _send_cmd_msg(message, options):
     # Remove empty options
     options = [o for o in options if o is not None]
     if options:
@@ -15,7 +16,7 @@ async def send_cmd_msg(message, options):
         await message.channel.send(response)
 
 
-async def send_chat_msg(message, keys, options):
+async def _send_chat_msg(message, keys, options):
     # Remove empty options
     msg = helpers.get_message_content(message)
     options = [o for o in options if o is not None]
@@ -26,11 +27,13 @@ async def send_chat_msg(message, keys, options):
 
 @client.event
 async def on_ready():
-    print("We have logged in as {0.user}".format(client))
+    """Dicord ready event for after a user logs in"""
+    print(f"We have logged in as {client.user}")
 
 
 @client.event
 async def on_message(message):
+    """Discord message event for after a user sends a message"""
     if message.author == client.user:
         return
     msg = helpers.get_message_content(message)
@@ -64,20 +67,20 @@ async def on_message(message):
 
     # Handle Command Messages
     msg_commands = list(filter(lambda c: c in msg, cmd_func_list.keys()))
-    for c in msg_commands:
-        assert cmd_func_list[c]
-        if cmd_func_list[c].get("value"):
-            await send_cmd_msg(message, cmd_func_list[c].get("value"))
+    for _c in msg_commands:
+        assert cmd_func_list[_c]
+        if cmd_func_list[_c].get("value"):
+            await _send_cmd_msg(message, cmd_func_list[_c].get("value"))
         else:
-            func = cmd_func_list[c].get("func")
-            kwargs = cmd_func_list[c].get("kwargs", {})
+            func = cmd_func_list[_c].get("func")
+            kwargs = cmd_func_list[_c].get("kwargs", {})
             if "query" in kwargs:
-                kwargs["query"] = helpers.get_cmd_input(msg, c)
-            print("INFO: Possible API request for {0} for {1}".format(func.__name__, c))
-            await send_cmd_msg(message, func(**kwargs))
+                kwargs["query"] = helpers.get_cmd_input(msg, _c)
+            print(f"INFO: Possible API request for {func.__name__} for {_c}")
+            await _send_cmd_msg(message, func(**kwargs))
 
     # Handle Chat Messages
-    await send_chat_msg(message, const.SAD_WORDS, const.ENCOURAGEMENTS)
+    await _send_chat_msg(message, const.SAD_WORDS, const.ENCOURAGEMENTS)
 
 
 client.run(os.getenv("DISCORD_TOKEN"))
