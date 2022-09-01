@@ -6,7 +6,7 @@ import const
 import helpers
 
 intents = discord.Intents.default()
-intents.message_content = True
+intents.members = True
 client = discord.Client(intents=intents)
 
 
@@ -40,15 +40,13 @@ async def on_message(message):
         return
     msg = helpers.get_message_content(message)
     # Define Commands so that they will be handled dynamically
-    jls_extract_var = "!fact"
-    jls_extract_var = jls_extract_var
     cmd_func_list = {
         "!help": {"value": [const.HELP_INFO]},
         "!hello": {"value": const.GREETING},
         "!rps": {"value": const.RPS},
         "!8ball": {"value": const.YES_NO},
         "!inspire": {"func": helpers.get_quote},
-        jls_extract_var: {"func": helpers.get_fact},
+        "!fact": {"func": helpers.get_fact},
         "!dice": {"func": helpers.roll_dice},
         "!space": {"func": helpers.get_space_pic},
         "!sortinghat": {"func": helpers.get_sorting_house},
@@ -87,4 +85,4 @@ async def on_message(message):
     await _send_chat_msg(message, const.SAD_WORDS, const.ENCOURAGEMENTS)
 
 
-client.run(os.getenv("DISCORD_TOKEN"))
+client.run(os.environ['DISCORD_TOKEN'])
