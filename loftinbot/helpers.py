@@ -65,7 +65,7 @@ def get_cur_weather(query):
     # Get specific data
     try:
         json_data = json_data["locations"][f"{query}"]["currentConditions"]
-    except:
+    except BaseException:
         print("Could not find currentConditions.")
     cur_temp = json_data["temp"]
     heat_index = json_data["heatindex"]
