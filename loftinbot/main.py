@@ -5,8 +5,7 @@ import discord
 import const
 import helpers
 
-intents = discord.Intents.default()
-intents.members = True
+intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
 
