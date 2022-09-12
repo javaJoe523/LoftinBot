@@ -136,7 +136,7 @@ def send_request(query=None, display=False, verbose=False):
         logging.error(
             "Run google-oauthlib-tool to initialize " "new OAuth 2.0 credentials."
         )
-        return "ERROR: Credentials"
+        return f"ERROR: Credentials - {e}"
 
     # Create an authorized gRPC channel.
     grpc_channel = google.auth.transport.grpc.secure_authorized_channel(

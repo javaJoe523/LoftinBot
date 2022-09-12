@@ -84,4 +84,4 @@ async def on_message(message):
     await _send_chat_msg(message, const.SAD_WORDS, const.ENCOURAGEMENTS)
 
 
-client.run(os.environ['DISCORD_TOKEN'])
+client.run(os.environ["DISCORD_TOKEN"])
